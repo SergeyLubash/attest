@@ -84,7 +84,7 @@ class Subject_netCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subject_net
-        read_only_fields = ('id', 'title', 'contacts', 'products', 'arrears', 'created_date')
+        read_only_fields = ('id', 'title', 'contacts', 'products', 'created_date')
         fields = '__all__'
 
 
@@ -94,11 +94,11 @@ class Subject_netSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject_net
         fields = '__all__'
-        read_only_fields = ('id', 'title', 'contacts', 'products', 'arrears', 'created_date')
+        read_only_fields = ('id', 'title', 'contacts', 'products', 'created_date')
 
 
 class Subject_netListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
         fields = '__all__'
-        read_only_fields = ('id', 'title', 'arrears')
+        read_only_fields = ('id', 'title')

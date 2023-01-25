@@ -4,8 +4,8 @@ from .models import Subject_net, Product, Contact, Provider
 
 
 class Subject_netAdmin(admin.ModelAdmin):
-    list_display = ('title', 'contacts', 'products', 'provider', 'created_date')
-    search_fields = ('title', 'arrears')
+    list_display = ('title', 'contacts', 'products', 'created_date')
+    search_fields = ('title', 'contacts', 'products')
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -19,8 +19,8 @@ class ContactAdmin(admin.ModelAdmin):
 
 
 class ProviderAdmin(admin.ModelAdmin):
-    list_display = ('provider', 'arrears')
-    search_fields = ('provider', 'arrears')
+    list_display = ('providers', 'arrears')
+    search_fields = ('providers', 'arrears')
 
 
 admin.site.register(Subject_net, Subject_netAdmin)

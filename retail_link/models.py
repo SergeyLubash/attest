@@ -39,6 +39,30 @@ class Product(models.Model):
     quantity = models.IntegerField(verbose_name='Количество', blank=True)
 
 
+class Subject_net(models.Model):
+    """
+    Участник торговой сети:
+        Название;
+        Контакты;
+        Продукты;
+        Время создания (заполняется автоматически при создании).
+        """
+    class Meta:
+        verbose_name = 'Субъект сети'
+        verbose_name_plural = 'Субъекты сети'
+
+    title = models.CharField(verbose_name='Название субъекта', max_length=255, unique=True)
+    contacts = models.ForeignKey(Contact, verbose_name='Контакты', on_delete=models.CASCADE)
+    products = models.ForeignKey(Product, verbose_name='Продукты', on_delete=models.CASCADE)
+    created_date = models.DateField(verbose_name='Дата создания')
+
+    def save(self, *args, **kwargs):
+        if not self.id:  # Когда объект только создается, у него еще нет id
+            self.created = timezone.now()  # проставляем дату создания
+        self.updated = timezone.now()  # проставляем дату обновления
+        return super().save(*args, **kwargs)
+
+
 class Provider(models.Model):
     """
     Поставщик:
@@ -49,33 +73,6 @@ class Provider(models.Model):
         verbose_name = 'Поставщик'
         verbose_name_plural = 'Поставщики'
 
-    provider = models.CharField(verbose_name='Поставщик', max_length=255, blank=True)
+    subjects = models.ForeignKey(Subject_net, related_name='subjects', verbose_name='Субъект сети', on_delete=models.CASCADE)
+    providers = models.ForeignKey(Subject_net, related_name='providers', verbose_name='Поставщик', on_delete=models.CASCADE)
     arrears = models.FloatField(verbose_name='Задолженность', blank=True)
-
-
-class Subject_net(models.Model):
-    """
-    Участник торговой сети:
-        Название;
-        Контакты;
-        Продукты;
-        Поставщик (предыдущий по иерархии объект сети);
-        Задолженность перед поставщиком в денежном выражении с точностью до копеек;
-        Время создания (заполняется автоматически при создании).
-        """
-    class Meta:
-        verbose_name = 'Субъект сети'
-        verbose_name_plural = 'Субъекты сети'
-
-    title = models.CharField(verbose_name='Название субъекта', max_length=255, unique=True)
-    contacts = models.ForeignKey(Contact, verbose_name='Контакты', on_delete=models.CASCADE)
-    products = models.ForeignKey(Product, verbose_name='Продукты', on_delete=models.CASCADE)
-    provider = models.ForeignKey(Provider, verbose_name='Поставщик', on_delete=models.CASCADE)
-    # arrears = models.ForeignKey(Provider.arrears, verbose_name='Задолженность', on_delete=models.CASCADE)
-    created_date = models.DateField(verbose_name='Дата создания')
-
-    def save(self, *args, **kwargs):
-        if not self.id:  # Когда объект только создается, у него еще нет id
-            self.created = timezone.now()  # проставляем дату создания
-        self.updated = timezone.now()  # проставляем дату обновления
-        return super().save(*args, **kwargs)
