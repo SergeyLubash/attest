@@ -21,6 +21,9 @@ class Contact(models.Model):
     street = models.CharField(verbose_name='Улица', max_length=30, blank=True)
     house = models.CharField(verbose_name='Номер дома', max_length=5, blank=True)
 
+    def __str__(self):
+        return self.country
+
 
 class Product(models.Model):
     """
@@ -37,6 +40,9 @@ class Product(models.Model):
     product_model = models.CharField(verbose_name='Модель продукта', max_length=100, blank=True)
     date_out = models.DateField(verbose_name='Дата выхода продукта на рынок')
     quantity = models.IntegerField(verbose_name='Количество', blank=True)
+
+    def __str__(self):
+        return self.product_title
 
 
 class Subject_net(models.Model):
@@ -62,6 +68,9 @@ class Subject_net(models.Model):
         self.updated = timezone.now()  # проставляем дату обновления
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.title
+
 
 class Provider(models.Model):
     """
@@ -76,3 +85,6 @@ class Provider(models.Model):
     subjects = models.ForeignKey(Subject_net, related_name='subjects', verbose_name='Субъект сети', on_delete=models.CASCADE)
     providers = models.ForeignKey(Subject_net, related_name='providers', verbose_name='Поставщик', on_delete=models.CASCADE)
     arrears = models.FloatField(verbose_name='Задолженность', blank=True)
+
+    def __str__(self):
+        return self.providers
